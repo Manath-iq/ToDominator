@@ -15,7 +15,7 @@ import './mockEnv.ts';
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
 try {
-  // Configure all application dependencies.
+  // Configure application dependencies.
   init(retrieveLaunchParams().startParam === 'debug' || import.meta.env.DEV);
 
   root.render(

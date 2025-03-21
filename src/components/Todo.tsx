@@ -26,18 +26,20 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
   // Стили в соответствии со скриншотами
   const cellStyle = {
     backgroundColor: isCompleted 
-      ? themeColors.buttonColor 
+      ? themeColors.buttonColor
       : '#ffffff',
-    marginBottom: 8,
-    borderRadius: 10,
-    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+    marginBottom: 10,
+    borderRadius: 12,
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+    transform: isCompleted ? 'scale(0.98)' : 'scale(1)',
+    transition: 'all 0.2s ease',
   };
 
   const checkboxStyle = {
-    width: 20,
-    height: 20,
-    marginRight: 12,
-    borderRadius: 4,
+    width: 22,
+    height: 22,
+    marginRight: 14,
+    borderRadius: 6,
     border: isCompleted 
       ? 'none' 
       : `2px solid ${themeColors.hintColor}`,
@@ -50,6 +52,7 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
     display: 'flex' as const,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
+    transition: 'all 0.2s ease',
   };
 
   const textStyle = {
@@ -59,13 +62,14 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
     flexGrow: 1,
     fontSize: '16px',
     fontFamily: "'SF Pro Display', sans-serif",
-    fontWeight: 400,
+    fontWeight: isCompleted ? 500 : 400,
+    transition: 'all 0.2s ease',
   };
 
   return (
     <Cell style={cellStyle}>
       <div style={{ 
-        padding: '12px 16px', 
+        padding: '14px 16px', 
         display: "flex", 
         alignItems: "center",
         fontFamily: "'SF Pro Display', sans-serif",
@@ -86,8 +90,8 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
               xmlns="http://www.w3.org/2000/svg"
               style={{
                 position: 'absolute',
-                left: '3px',
-                top: '3px',
+                left: '4px',
+                top: '4px',
                 pointerEvents: 'none'
               }}
             >

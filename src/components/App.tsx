@@ -29,32 +29,22 @@ export function App() {
         style={{
           maxWidth: '600px',
           margin: '0 auto',
-          padding: '0 0 20px',
+          padding: '0 0 80px',
           minHeight: '100vh',
           backgroundColor: themeColors.bgColor,
           color: themeColors.textColor,
+          position: 'relative',
         }}
       >
         <header
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',
             alignItems: 'center',
             padding: '12px 16px',
             marginBottom: '10px',
           }}
         >
-          <div style={{ 
-            fontSize: '32px', 
-            fontWeight: 'bold',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
-            <span style={{ color: themeColors.buttonColor }}>0</span>
-            <span style={{ color: themeColors.hintColor }}>/</span>
-            <span style={{ color: themeColors.hintColor }}>0</span>
-          </div>
-          
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span
               style={{
@@ -106,7 +96,20 @@ export function App() {
           <TodoList />
         </main>
         
-        <footer style={{ padding: '0 16px', marginTop: '20px' }}>
+        <footer style={{ 
+          position: 'fixed', 
+          bottom: 0, 
+          left: 0, 
+          right: 0, 
+          padding: '10px 16px 20px', 
+          backgroundColor: themeColors.bgColor,
+          borderTop: `1px solid ${themeColors.borderColor || 'rgba(112, 132, 153, 0.1)'}`,
+          zIndex: 100,
+          maxWidth: '600px',
+          margin: '0 auto',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}>
           <AIInputField />
         </footer>
       </div>

@@ -36,7 +36,7 @@ export const TodoList = () => {
     }
   }, []);
 
-  // Сохранение в localStorage для демонстрации
+  // Сохранение в localStorage
   const saveTodos = (updatedTodos: TodoItem[]) => {
     try {
       localStorage.setItem('todos', JSON.stringify(updatedTodos));
@@ -98,8 +98,8 @@ export const TodoList = () => {
           display: 'flex', 
           justifyContent: 'flex-start', 
           alignItems: 'center',
-          margin: '10px 0 20px',
-          fontSize: '28px',
+          margin: '16px 0',
+          fontSize: '32px',
           fontWeight: 'bold',
           fontFamily: "'SF Pro Display', sans-serif",
           color: themeColors.textColor
@@ -127,7 +127,7 @@ export const TodoList = () => {
         </span>
       </div>
       
-      <List>
+      <List style={{ paddingBottom: '10px' }}>
         {todos.map(todo => (
           <Todo
             key={todo.id}
@@ -142,12 +142,13 @@ export const TodoList = () => {
       <Button 
         size="l" 
         style={{ 
-          marginTop: 20, 
+          marginTop: 16, 
+          marginBottom: 16,
           width: '100%', 
-          backgroundColor: themeColors.buttonColor, 
-          color: themeColors.buttonTextColor,
+          backgroundColor: '#000000', 
+          color: '#FFFFFF',
           borderRadius: '10px',
-          padding: '12px',
+          padding: '14px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -159,7 +160,7 @@ export const TodoList = () => {
         onClick={() => setIsModalOpen(true)}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4 17.17V4H20V16Z" fill="white"/>
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="white"/>
         </svg>
         New Task
       </Button>
