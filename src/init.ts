@@ -15,6 +15,43 @@ export function init(debug: boolean): void {
   // Set @telegram-apps/sdk-react debug mode.
   $debug.set(debug);
 
+  // Добавляем поддержку пассивных обработчиков событий
+  document.addEventListener = ((originalFunction) => {
+    return function(this: Document, type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) {
+      // Для событий scroll, wheel, touchstart, touchmove делаем passive: true если явно не указано иное
+      if (type === 'touchstart' || type === 'touchmove' || type === 'wheel' || type === 'mousewheel') {
+        if (typeof options === 'object') {
+          if (options.passive === undefined) {
+            options = { ...options, passive: true };
+          }
+        } else if (options === undefined || options === false) {
+          options = { passive: true };
+        }
+      }
+      return originalFunction.call(this, type, listener, options);
+    };
+  })(document.addEventListener);
+
+  // То же самое для Element.addEventListener
+  const originalElementAddEventListener = Element.prototype.addEventListener;
+  Element.prototype.addEventListener = function(
+    type: string, 
+    listener: EventListenerOrEventListenerObject, 
+    options?: boolean | AddEventListenerOptions
+  ) {
+    // Для событий scroll, wheel, touchstart, touchmove делаем passive: true если явно не указано иное
+    if (type === 'touchstart' || type === 'touchmove' || type === 'wheel' || type === 'mousewheel') {
+      if (typeof options === 'object') {
+        if (options.passive === undefined) {
+          options = { ...options, passive: true };
+        }
+      } else if (options === undefined || options === false) {
+        options = { passive: true };
+      }
+    }
+    return originalElementAddEventListener.call(this, type, listener, options);
+  };
+
   // Initialize special event handlers for Telegram Desktop, Android, iOS, etc.
   // Also, configure the package.
   initSDK();

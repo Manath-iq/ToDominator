@@ -1,7 +1,7 @@
 /* SF Pro шрифты */
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('https://fonts.cdnfonts.com/s/59278/SFPRODISPLAYREGULAR.woff') format('woff');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/sf-pro-display/SFProDisplayRegular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('https://fonts.cdnfonts.com/s/59278/SFPRODISPLAYMEDIUM.woff') format('woff');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/sf-pro-display/SFProDisplayMedium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -17,7 +17,7 @@
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('https://fonts.cdnfonts.com/s/59278/SFPRODISPLAYBOLD.woff') format('woff');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/sf-pro-display/SFProDisplayBold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -25,7 +25,7 @@
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('https://fonts.cdnfonts.com/s/59278/SFPRODISPLAYSEMIBOLD.woff') format('woff');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/sf-pro-display/SFProDisplaySemibold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -33,7 +33,7 @@
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('https://fonts.cdnfonts.com/s/59278/SFPRODISPLAYLIGHT.woff') format('woff');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/sf-pro-display/SFProDisplayLight.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
