@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { List, Button } from '@telegram-apps/telegram-ui';
 import { v4 as uuidv4 } from 'uuid';
+import { initData } from '@telegram-apps/sdk-react';
 import { Todo } from './Todo';
 import { AddTaskModal } from './AddTaskModal';
 import { useThemeColors } from './theme';
@@ -16,11 +17,16 @@ export const TodoList = () => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [completedCount, setCompletedCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Получаем ID пользователя для хранения задач
+  const user = initData.user();
+  const userId = user?.id?.toString() || 'anonymous';
+  const storageKey = `todos_${userId}`;
 
   // Загрузка данных при монтировании
   useEffect(() => {
     try {
-      const savedTodos = localStorage.getItem('todos');
+      const savedTodos = localStorage.getItem(storageKey);
       if (savedTodos) {
         const parsedTodos = JSON.parse(savedTodos);
         setTodos(parsedTodos);
@@ -29,17 +35,17 @@ export const TodoList = () => {
         // Для новых пользователей - пустой массив задач
         setTodos([]);
         setCompletedCount(0);
-        localStorage.setItem('todos', JSON.stringify([]));
+        localStorage.setItem(storageKey, JSON.stringify([]));
       }
     } catch (error) {
       console.error('Ошибка при загрузке задач:', error);
     }
-  }, []);
+  }, [storageKey]);
 
   // Сохранение в localStorage
   const saveTodos = (updatedTodos: TodoItem[]) => {
     try {
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      localStorage.setItem(storageKey, JSON.stringify(updatedTodos));
       setCompletedCount(updatedTodos.filter(todo => todo.completed).length);
     } catch (error) {
       console.error('Ошибка при сохранении задач:', error);

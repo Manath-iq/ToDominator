@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { initData } from '@telegram-apps/sdk-react';
 import { TodoList } from './TodoList';
 import { AIInputField } from './AIInputField';
 import { useThemeColors } from './theme';
@@ -9,7 +10,11 @@ type SubscriptionType = 'pro trial' | 'premium' | 'none';
 export const TodoApp = () => {
   const themeColors = useThemeColors();
   const [subscription] = useState<SubscriptionType>('pro trial');
-  const [username] = useState('ulikashi');
+  
+  // Получаем данные пользователя из Telegram
+  const user = initData.user();
+  const username = user?.username || user?.firstName || 'Пользователь';
+  const photoUrl = user?.photoUrl || '';
 
   // Загрузка параметров темы и подписки
   useEffect(() => {
@@ -61,7 +66,7 @@ export const TodoApp = () => {
               marginRight: '8px'
             }}
           >
-            {subscription}
+            {user?.isPremium ? 'premium' : subscription}
           </span>
           
           <div
@@ -77,7 +82,7 @@ export const TodoApp = () => {
             }}
           >
             <img 
-              src="https://t.me/i/userpic/320/ulikashi.jpg" 
+              src={photoUrl || undefined} 
               alt="User avatar" 
               style={{
                 width: '100%',
