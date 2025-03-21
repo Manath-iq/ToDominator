@@ -12,7 +12,11 @@ export interface TodoItem {
   completed: boolean;
 }
 
-export const TodoList = () => {
+interface TodoListProps {
+  onCountsChange?: (completed: number, total: number) => void;
+}
+
+export const TodoList = ({ onCountsChange }: TodoListProps) => {
   const themeColors = useThemeColors();
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [completedCount, setCompletedCount] = useState(0);
@@ -23,6 +27,20 @@ export const TodoList = () => {
   const userId = user?.id?.toString() || 'anonymous';
   const storageKey = `todos_${userId}`;
 
+  // Функция для обновления счетчиков задач
+  const updateCounts = (todosList: TodoItem[]) => {
+    const completed = todosList.filter(todo => todo.completed).length;
+    setCompletedCount(completed);
+    
+    // Вызываем колбэк из родительского компонента, если он существует
+    if (onCountsChange) {
+      onCountsChange(completed, todosList.length);
+    }
+    
+    // Создаем собственное событие для информирования других компонентов
+    window.dispatchEvent(new CustomEvent('todosUpdated'));
+  };
+
   // Загрузка данных при монтировании
   useEffect(() => {
     try {
@@ -30,23 +48,23 @@ export const TodoList = () => {
       if (savedTodos) {
         const parsedTodos = JSON.parse(savedTodos);
         setTodos(parsedTodos);
-        setCompletedCount(parsedTodos.filter((todo: TodoItem) => todo.completed).length);
+        updateCounts(parsedTodos);
       } else {
         // Для новых пользователей - пустой массив задач
         setTodos([]);
-        setCompletedCount(0);
+        updateCounts([]);
         localStorage.setItem(storageKey, JSON.stringify([]));
       }
     } catch (error) {
       console.error('Ошибка при загрузке задач:', error);
     }
-  }, [storageKey]);
+  }, [storageKey, onCountsChange]);
 
   // Сохранение в localStorage
   const saveTodos = (updatedTodos: TodoItem[]) => {
     try {
       localStorage.setItem(storageKey, JSON.stringify(updatedTodos));
-      setCompletedCount(updatedTodos.filter(todo => todo.completed).length);
+      updateCounts(updatedTodos);
     } catch (error) {
       console.error('Ошибка при сохранении задач:', error);
     }
@@ -99,40 +117,6 @@ export const TodoList = () => {
   
   return (
     <div style={{ padding: '0 16px' }}>
-      <div 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'flex-start', 
-          alignItems: 'center',
-          margin: '16px 0',
-          fontSize: '32px',
-          fontWeight: 'bold',
-          fontFamily: "'SF Pro Display', sans-serif",
-          color: themeColors.textColor
-        }}
-      >
-        <span style={{ 
-          color: themeColors.buttonColor,
-          marginRight: '4px',
-          fontWeight: 700,
-        }}>
-          {completedCount}
-        </span>
-        <span style={{ 
-          color: themeColors.hintColor,
-          marginRight: '4px',
-          fontWeight: 400,
-        }}>
-          /
-        </span>
-        <span style={{ 
-          color: themeColors.hintColor,
-          fontWeight: 400,
-        }}>
-          {todos.length}
-        </span>
-      </div>
-      
       <List style={{ paddingBottom: '10px' }}>
         {todos.map(todo => (
           <Todo
@@ -145,31 +129,15 @@ export const TodoList = () => {
         ))}
       </List>
       
-      <Button 
-        size="l" 
-        style={{ 
-          marginTop: 16, 
-          marginBottom: 16,
-          width: '100%', 
-          backgroundColor: '#000000', 
-          color: '#FFFFFF',
-          borderRadius: '10px',
-          padding: '14px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          fontFamily: "'SF Pro Display', sans-serif",
-          fontWeight: 500,
-          fontSize: '16px'
-        }}
-        onClick={() => setIsModalOpen(true)}
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="white"/>
-        </svg>
-        New Task
-      </Button>
+      {/* Скрытая кнопка-триггер для открытия модального окна */}
+      <div style={{ display: 'none' }}>
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          data-add-task="true"
+        >
+          New Task
+        </button>
+      </div>
       
       {isModalOpen && (
         <AddTaskModal
