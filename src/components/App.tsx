@@ -50,18 +50,32 @@ export function App() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span
-              style={{
-                color: subscription === 'premium' 
-                  ? themeColors.accentColor 
-                  : themeColors.premiumColor,
-                fontWeight: 'normal',
-                fontSize: '16px',
-                marginRight: '8px'
-              }}
-            >
-              {user?.isPremium ? 'premium' : subscription}
-            </span>
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'flex-end',
+              marginRight: '8px' 
+            }}>
+              <span style={{ 
+                color: themeColors.textColor,
+                fontWeight: 'medium',
+                fontSize: '14px',
+                marginBottom: '2px'
+              }}>
+                {username}
+              </span>
+              <span
+                style={{
+                  color: subscription === 'premium' 
+                    ? themeColors.accentColor 
+                    : themeColors.premiumColor,
+                  fontWeight: 'normal',
+                  fontSize: '12px'
+                }}
+              >
+                {user?.isPremium ? 'premium' : subscription}
+              </span>
+            </div>
             
             <div
               style={{
