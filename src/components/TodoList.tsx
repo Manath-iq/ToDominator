@@ -3,18 +3,7 @@ import { List, Button } from '@telegram-apps/telegram-ui';
 import { v4 as uuidv4 } from 'uuid';
 import { Todo } from './Todo';
 import { AddTaskModal } from './AddTaskModal';
-
-// Объект с цветами темы Telegram
-const themeColors = {
-  bgColor: '#17212b',
-  textColor: '#f5f5f5',
-  buttonColor: '#3390EC',
-  buttonTextColor: '#ffffff',
-  accentColor: '#6ab2f2',
-  secondaryBgColor: '#232e3c',
-  hintColor: '#708499',
-  borderColor: 'rgba(112, 132, 153, 0.2)'
-};
+import { useThemeColors } from './theme';
 
 export interface TodoItem {
   id: string;
@@ -23,6 +12,7 @@ export interface TodoItem {
 }
 
 export const TodoList = () => {
+  const themeColors = useThemeColors();
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [completedCount, setCompletedCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);

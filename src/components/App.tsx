@@ -3,23 +3,13 @@ import { AppRoot } from '@telegram-apps/telegram-ui';
 import { useState, useEffect } from 'react';
 import { TodoList } from './TodoList';
 import { AIInputField } from './AIInputField';
-
-// Объект с цветами темы Telegram
-const themeColors = {
-  bgColor: '#17212b',
-  textColor: '#f5f5f5',
-  buttonColor: '#3390EC',
-  buttonTextColor: '#ffffff',
-  accentColor: '#6ab2f2',
-  secondaryBgColor: '#232e3c',
-  hintColor: '#708499',
-  premiumColor: '#f5a623'
-};
+import { useThemeColors } from './theme';
 
 // Типы подписок
 type SubscriptionType = 'pro trial' | 'premium' | 'none';
 
 export function App() {
+  const themeColors = useThemeColors();
   const lp = useLaunchParams();
   const isDark = useSignal(miniApp.isDark);
   const [subscription] = useState<SubscriptionType>('pro trial');
@@ -28,7 +18,7 @@ export function App() {
   useEffect(() => {
     document.body.style.backgroundColor = themeColors.bgColor;
     document.body.style.color = themeColors.textColor;
-  }, []);
+  }, [themeColors.bgColor, themeColors.textColor]);
 
   return (
     <AppRoot

@@ -1,19 +1,6 @@
 import { useState, useRef } from 'react';
 import { Button } from '@telegram-apps/telegram-ui';
-
-// Объект с цветами темы Telegram
-const themeColors = {
-  bgColor: '#17212b',
-  textColor: '#f5f5f5',
-  buttonColor: '#3390EC',
-  buttonTextColor: '#ffffff',
-  accentColor: '#6ab2f2',
-  secondaryBgColor: '#232e3c',
-  hintColor: '#708499',
-  linkColor: '#3390EC',
-  inputBgColor: '#ffffff',
-  borderColor: 'rgba(112, 132, 153, 0.2)'
-};
+import { useThemeColors } from './theme';
 
 interface ContextTag {
   id: string;
@@ -22,6 +9,7 @@ interface ContextTag {
 }
 
 export const AIInputField = () => {
+  const themeColors = useThemeColors();
   const [inputValue, setInputValue] = useState('');
   const [contextTags, setContextTags] = useState<ContextTag[]>([]);
   const [showResponse, setShowResponse] = useState(false);

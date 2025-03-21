@@ -1,19 +1,6 @@
 import { useState } from 'react';
 import { Button, Input } from '@telegram-apps/telegram-ui';
-
-// Объект с цветами темы Telegram
-const themeColors = {
-  bgColor: '#17212b',
-  textColor: '#f5f5f5',
-  buttonColor: '#3390EC',
-  buttonTextColor: '#ffffff',
-  accentColor: '#6ab2f2',
-  secondaryBgColor: '#232e3c',
-  hintColor: '#708499',
-  inputBgColor: '#ffffff',
-  inputTextColor: '#000000',
-  borderColor: 'rgba(112, 132, 153, 0.2)'
-};
+import { useThemeColors } from './theme';
 
 interface AddTaskModalProps {
   onClose: () => void;
@@ -21,6 +8,7 @@ interface AddTaskModalProps {
 }
 
 export const AddTaskModal = ({ onClose, onAddTask }: AddTaskModalProps) => {
+  const themeColors = useThemeColors();
   const [taskText, setTaskText] = useState('');
   
   const handleSubmit = () => {

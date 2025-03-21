@@ -1,17 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Cell } from '@telegram-apps/telegram-ui';
-
-// Объект с цветами темы Telegram
-const themeColors = {
-  bgColor: '#17212b',
-  textColor: '#f5f5f5',
-  buttonColor: '#3390EC',
-  buttonTextColor: '#ffffff',
-  accentColor: '#6ab2f2',
-  secondaryBgColor: '#232e3c',
-  hintColor: '#708499',
-  borderColor: 'rgba(112, 132, 153, 0.2)'
-};
+import { useThemeColors } from './theme';
 
 interface TodoProps {
   id: string;
@@ -21,6 +10,7 @@ interface TodoProps {
 }
 
 export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
+  const themeColors = useThemeColors();
   const [isCompleted, setIsCompleted] = useState(completed);
   const [removing, setRemoving] = useState(false);
 

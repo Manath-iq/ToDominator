@@ -1,25 +1,13 @@
 import { useState, useEffect } from 'react';
 import { TodoList } from './TodoList';
 import { AIInputField } from './AIInputField';
+import { useThemeColors } from './theme';
 
 // Типы подписок
 type SubscriptionType = 'pro trial' | 'premium' | 'none';
 
-// Объект с цветами темы Telegram для использования в компоненте
-const themeColors = {
-  bgColor: '#17212b',
-  textColor: '#f5f5f5',
-  buttonColor: '#3390EC',
-  buttonTextColor: '#ffffff',
-  accentColor: '#6ab2f2',
-  secondaryBgColor: '#232e3c',
-  hintColor: '#708499',
-  premiumColor: '#f5a623',
-  headerBgColor: '#17212b',
-  cardBgColor: '#1c2733',
-};
-
 export const TodoApp = () => {
+  const themeColors = useThemeColors();
   const [subscription] = useState<SubscriptionType>('pro trial');
   const [username] = useState('ulikashi');
 
@@ -29,7 +17,7 @@ export const TodoApp = () => {
     // Но для демонстрации используем заданные значения
     document.body.style.backgroundColor = themeColors.bgColor;
     document.body.style.color = themeColors.textColor;
-  }, []);
+  }, [themeColors.bgColor, themeColors.textColor]);
   
   return (
     <div
