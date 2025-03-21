@@ -12,37 +12,15 @@ interface TodoProps {
 export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
   const themeColors = useThemeColors();
   const [isCompleted, setIsCompleted] = useState(completed);
-  const [removing, setRemoving] = useState(false);
 
   useEffect(() => {
     setIsCompleted(completed);
   }, [completed]);
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    
-    if (isCompleted && !removing) {
-      setRemoving(true);
-      timer = setTimeout(() => {
-        onToggle(id);
-      }, 5000); // 5 секунд до удаления
-    }
-    
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
-  }, [isCompleted, removing, id, onToggle]);
-
   const handleToggle = () => {
-    if (removing) {
-      setRemoving(false);
-      setIsCompleted(false);
-      return;
-    }
-    
     setIsCompleted(!isCompleted);
+    // Вызываем родительскую функцию для обработки состояния завершения
+    onToggle(id);
   };
 
   // Стили в соответствии со скриншотами

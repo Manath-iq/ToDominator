@@ -26,18 +26,10 @@ export const TodoList = () => {
         setTodos(parsedTodos);
         setCompletedCount(parsedTodos.filter((todo: TodoItem) => todo.completed).length);
       } else {
-        // Демо данные для тестирования
-        const demoTodos = [
-          { id: uuidv4(), text: 'Пойти в зал', completed: false },
-          { id: uuidv4(), text: 'Пойти в зал', completed: false },
-          { id: uuidv4(), text: 'Пойти в зал', completed: true },
-          { id: uuidv4(), text: 'Пойти в зал', completed: true },
-          { id: uuidv4(), text: 'Пойти в зал', completed: true },
-          { id: uuidv4(), text: 'Пойти в зал', completed: true },
-        ];
-        setTodos(demoTodos);
-        setCompletedCount(demoTodos.filter(todo => todo.completed).length);
-        localStorage.setItem('todos', JSON.stringify(demoTodos));
+        // Для новых пользователей - пустой массив задач
+        setTodos([]);
+        setCompletedCount(0);
+        localStorage.setItem('todos', JSON.stringify([]));
       }
     } catch (error) {
       console.error('Ошибка при загрузке задач:', error);
@@ -55,20 +47,33 @@ export const TodoList = () => {
   };
   
   const handleToggle = (id: string) => {
-    const updatedTodos = todos.filter(todo => {
-      if (todo.id === id) {
-        // Если задача уже завершена и отмечена, удаляем ее
-        if (todo.completed) {
-          return false;
-        }
-        // Если не завершена, отмечаем как завершенную
-        todo.completed = true;
-      }
-      return todo;
-    });
+    // Находим задачу по id
+    const todoToUpdate = todos.find(todo => todo.id === id);
     
-    setTodos(updatedTodos);
-    saveTodos(updatedTodos);
+    if (todoToUpdate) {
+      if (todoToUpdate.completed) {
+        // Если задача уже завершена, удаляем ее
+        const updatedTodos = todos.filter(todo => todo.id !== id);
+        setTodos(updatedTodos);
+        saveTodos(updatedTodos);
+      } else {
+        // Если задача не завершена, отмечаем как завершенную и удаляем через 5 секунд
+        const updatedTodos = todos.map(todo => 
+          todo.id === id ? { ...todo, completed: true } : todo
+        );
+        setTodos(updatedTodos);
+        saveTodos(updatedTodos);
+        
+        // Удаляем задачу через 5 секунд после завершения
+        setTimeout(() => {
+          setTodos(prevTodos => {
+            const filteredTodos = prevTodos.filter(todo => todo.id !== id);
+            saveTodos(filteredTodos);
+            return filteredTodos;
+          });
+        }, 5000);
+      }
+    }
   };
   
   const handleAddTask = (text: string) => {
