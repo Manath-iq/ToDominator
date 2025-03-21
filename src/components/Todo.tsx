@@ -28,21 +28,23 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
     backgroundColor: isCompleted 
       ? themeColors.buttonColor
       : '#ffffff',
-    marginBottom: 10,
-    borderRadius: 12,
-    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+    marginBottom: 6,
+    borderRadius: 10,
+    boxShadow: '0 1px 1px rgba(0, 0, 0, 0.05)',
     transform: isCompleted ? 'scale(0.98)' : 'scale(1)',
     transition: 'all 0.2s ease',
+    width: '100%',
+    maxWidth: '100%',
   };
 
   const checkboxStyle = {
-    width: 22,
-    height: 22,
-    marginRight: 14,
-    borderRadius: 6,
+    width: 18,
+    height: 18,
+    marginRight: 10,
+    borderRadius: 4,
     border: isCompleted 
       ? 'none' 
-      : `2px solid ${themeColors.hintColor}`,
+      : `1.5px solid ${themeColors.hintColor}`,
     backgroundColor: isCompleted
       ? themeColors.buttonColor
       : 'transparent',
@@ -60,7 +62,7 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
       ? themeColors.buttonTextColor 
       : '#000000',
     flexGrow: 1,
-    fontSize: '16px',
+    fontSize: '15px',
     fontFamily: "'SF Pro Display', sans-serif",
     fontWeight: isCompleted ? 500 : 400,
     transition: 'all 0.2s ease',
@@ -69,7 +71,7 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
   return (
     <Cell style={cellStyle}>
       <div style={{ 
-        padding: '14px 16px', 
+        padding: '6px 12px', 
         display: "flex", 
         alignItems: "center",
         fontFamily: "'SF Pro Display', sans-serif",
@@ -83,15 +85,15 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
           />
           {isCompleted && (
             <svg
-              width="14"
-              height="14"
+              width="12"
+              height="12"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               style={{
                 position: 'absolute',
-                left: '4px',
-                top: '4px',
+                left: '3px',
+                top: '3px',
                 pointerEvents: 'none'
               }}
             >

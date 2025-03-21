@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { List, Button } from '@telegram-apps/telegram-ui';
+import { List } from '@telegram-apps/telegram-ui';
 import { v4 as uuidv4 } from 'uuid';
 import { initData } from '@telegram-apps/sdk-react';
 import { Todo } from './Todo';
 import { AddTaskModal } from './AddTaskModal';
-import { useThemeColors } from './theme';
 
 export interface TodoItem {
   id: string;
@@ -17,9 +16,7 @@ interface TodoListProps {
 }
 
 export const TodoList = ({ onCountsChange }: TodoListProps) => {
-  const themeColors = useThemeColors();
   const [todos, setTodos] = useState<TodoItem[]>([]);
-  const [completedCount, setCompletedCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Получаем ID пользователя для хранения задач
@@ -30,7 +27,6 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
   // Функция для обновления счетчиков задач
   const updateCounts = (todosList: TodoItem[]) => {
     const completed = todosList.filter(todo => todo.completed).length;
-    setCompletedCount(completed);
     
     // Вызываем колбэк из родительского компонента, если он существует
     if (onCountsChange) {
@@ -116,8 +112,8 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
   };
   
   return (
-    <div style={{ padding: '0 16px' }}>
-      <List style={{ paddingBottom: '10px' }}>
+    <div style={{ padding: '0 4px' }}>
+      <List style={{ paddingBottom: '6px', width: '100%', maxWidth: '100%' }}>
         {todos.map(todo => (
           <Todo
             key={todo.id}
