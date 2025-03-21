@@ -101,25 +101,27 @@ export const TodoList = () => {
           margin: '10px 0 20px',
           fontSize: '28px',
           fontWeight: 'bold',
+          fontFamily: "'SF Pro Display', sans-serif",
           color: themeColors.textColor
         }}
       >
         <span style={{ 
           color: themeColors.buttonColor,
-          marginRight: '4px'
+          marginRight: '4px',
+          fontWeight: 700,
         }}>
           {completedCount}
         </span>
         <span style={{ 
           color: themeColors.hintColor,
           marginRight: '4px',
-          fontWeight: 'normal'
+          fontWeight: 400,
         }}>
           /
         </span>
         <span style={{ 
           color: themeColors.hintColor,
-          fontWeight: 'normal'
+          fontWeight: 400,
         }}>
           {todos.length}
         </span>
@@ -149,7 +151,10 @@ export const TodoList = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '8px'
+          gap: '8px',
+          fontFamily: "'SF Pro Display', sans-serif",
+          fontWeight: 500,
+          fontSize: '16px'
         }}
         onClick={() => setIsModalOpen(true)}
       >

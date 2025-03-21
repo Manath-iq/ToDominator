@@ -58,6 +58,8 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
       : '#000000',
     flexGrow: 1,
     fontSize: '16px',
+    fontFamily: "'SF Pro Display', sans-serif",
+    fontWeight: 400,
   };
 
   return (
@@ -65,7 +67,8 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
       <div style={{ 
         padding: '12px 16px', 
         display: "flex", 
-        alignItems: "center" 
+        alignItems: "center",
+        fontFamily: "'SF Pro Display', sans-serif",
       }}>
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           <input

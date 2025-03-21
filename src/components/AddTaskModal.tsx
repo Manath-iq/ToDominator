@@ -31,6 +31,7 @@ export const AddTaskModal = ({ onClose, onAddTask }: AddTaskModalProps) => {
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1000,
+        fontFamily: "'SF Pro Display', sans-serif",
       }}
       onClick={onClose}
     >
@@ -48,8 +49,9 @@ export const AddTaskModal = ({ onClose, onAddTask }: AddTaskModalProps) => {
         <h3 style={{ 
           marginBottom: '15px', 
           color: themeColors.textColor,
-          fontWeight: 'bold',
-          fontSize: '18px'
+          fontWeight: 600,
+          fontSize: '18px',
+          fontFamily: "'SF Pro Display', sans-serif",
         }}>
           Новая задача
         </h3>
@@ -66,7 +68,10 @@ export const AddTaskModal = ({ onClose, onAddTask }: AddTaskModalProps) => {
             color: themeColors.inputTextColor,
             border: 'none',
             width: '100%',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            fontFamily: "'SF Pro Display', sans-serif",
+            fontSize: '16px',
+            fontWeight: 400,
           }}
           autoFocus
         />
@@ -78,7 +83,8 @@ export const AddTaskModal = ({ onClose, onAddTask }: AddTaskModalProps) => {
               color: themeColors.textColor,
               padding: '10px 16px',
               borderRadius: '8px',
-              fontWeight: 'medium'
+              fontWeight: 500,
+              fontFamily: "'SF Pro Display', sans-serif",
             }}
             onClick={onClose}
           >
@@ -90,7 +96,8 @@ export const AddTaskModal = ({ onClose, onAddTask }: AddTaskModalProps) => {
               color: themeColors.buttonTextColor,
               padding: '10px 16px',
               borderRadius: '8px',
-              fontWeight: 'medium'
+              fontWeight: 500,
+              fontFamily: "'SF Pro Display', sans-serif",
             }}
             onClick={handleSubmit}
           >
