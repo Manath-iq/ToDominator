@@ -103,7 +103,7 @@ export function App() {
             display: 'flex',
             alignItems: 'center'
           }}>
-            <span style={{ color: '#3390EC', marginRight: '2px' }}>{completedCount}</span>
+            <span style={{ color: themeColors.buttonColor, marginRight: '2px' }}>{completedCount}</span>
             <span style={{ 
               position: 'relative',
               display: 'inline-block',
@@ -151,7 +151,7 @@ export function App() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '2px solid #3390EC'
+                border: `2px solid ${themeColors.buttonColor}`
               }}
             >
               <img 
@@ -180,8 +180,8 @@ export function App() {
           <button
             style={{
               width: '100%',
-              backgroundColor: '#3390EC',
-              color: '#FFFFFF',
+              backgroundColor: themeColors.buttonColor,
+              color: themeColors.buttonTextColor,
               border: 'none',
               borderRadius: '12px',
               padding: '14px 0',
