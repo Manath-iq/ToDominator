@@ -48,9 +48,6 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
 
   // Функция для обновления счетчиков задач
   const updateCounts = (todosList: TodoItem[], completedTask: boolean = false) => {
-    const currentTodos = todosList.filter(todo => !todo.completed).length;
-    const currentCompleted = todosList.filter(todo => todo.completed).length;
-    
     // Получаем текущую статистику
     const stats = getStats();
     
