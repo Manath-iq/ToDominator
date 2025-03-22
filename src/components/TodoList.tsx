@@ -3,7 +3,6 @@ import { List } from '@telegram-apps/telegram-ui';
 import { v4 as uuidv4 } from 'uuid';
 import { initData } from '@telegram-apps/sdk-react';
 import { Todo } from './Todo';
-import { AddTaskModal } from './AddTaskModal';
 
 export interface TodoItem {
   id: string;
@@ -17,7 +16,7 @@ interface TodoListProps {
 
 export const TodoList = ({ onCountsChange }: TodoListProps) => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   
   // Получаем ID пользователя для хранения задач
   const user = initData.user();
@@ -96,20 +95,60 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
     }
   };
   
-  const handleAddTask = (text: string) => {
-    if (text.trim()) {
-      const newTodo: TodoItem = {
-        id: uuidv4(),
-        text: text.trim(),
-        completed: false
-      };
-      
-      const updatedTodos = [...todos, newTodo];
-      setTodos(updatedTodos);
-      saveTodos(updatedTodos);
-      setIsModalOpen(false);
-    }
+  const handleAddTask = () => {
+    // Создаем новую пустую задачу
+    const newTodoId = uuidv4();
+    const newTodo: TodoItem = {
+      id: newTodoId,
+      text: '',
+      completed: false
+    };
+    
+    const updatedTodos = [...todos, newTodo];
+    setTodos(updatedTodos);
+    // Не сохраняем в localStorage пока пользователь не введет текст
+    setEditingId(newTodoId);
   };
+  
+  const handleTextChange = (id: string, text: string) => {
+    // Обновляем текст задачи во время редактирования
+    setTodos(prevTodos => 
+      prevTodos.map(todo => 
+        todo.id === id ? { ...todo, text } : todo
+      )
+    );
+  };
+  
+  const handleBlur = (id: string) => {
+    // Сохраняем задачу при потере фокуса
+    setEditingId(null);
+    
+    const updatedTodos = todos.map(todo => ({
+      ...todo,
+      text: todo.text.trim()
+    }));
+    
+    // Удаляем пустые задачи
+    const filteredTodos = updatedTodos.filter(todo => todo.text !== '');
+    
+    setTodos(filteredTodos);
+    saveTodos(filteredTodos);
+  };
+  
+  // Добавляем обработчик для кнопки New Task
+  useEffect(() => {
+    const addTaskButton = document.querySelector('button[data-add-task]');
+    if (addTaskButton) {
+      const button = addTaskButton as HTMLButtonElement;
+      button.onclick = handleAddTask;
+    }
+    
+    return () => {
+      if (addTaskButton) {
+        (addTaskButton as HTMLButtonElement).onclick = null;
+      }
+    };
+  }, [todos]);
   
   return (
     <div style={{ padding: '0 4px' }}>
@@ -121,26 +160,22 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
             text={todo.text}
             completed={todo.completed}
             onToggle={handleToggle}
+            isEditing={todo.id === editingId}
+            onTextChange={handleTextChange}
+            onBlur={handleBlur}
           />
         ))}
       </List>
       
-      {/* Скрытая кнопка-триггер для открытия модального окна */}
+      {/* Скрытая кнопка-триггер для добавления задачи */}
       <div style={{ display: 'none' }}>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleAddTask}
           data-add-task="true"
         >
           New Task
         </button>
       </div>
-      
-      {isModalOpen && (
-        <AddTaskModal
-          onClose={() => setIsModalOpen(false)}
-          onAddTask={handleAddTask}
-        />
-      )}
     </div>
   );
 }; 

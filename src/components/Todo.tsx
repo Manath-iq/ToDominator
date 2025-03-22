@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Cell } from '@telegram-apps/telegram-ui';
 import { useThemeColors } from './theme';
 
@@ -7,20 +7,65 @@ interface TodoProps {
   text: string;
   completed: boolean;
   onToggle: (id: string) => void;
+  isEditing?: boolean;
+  onTextChange?: (id: string, text: string) => void;
+  onBlur?: (id: string) => void;
 }
 
-export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
+export const Todo = ({ 
+  id, 
+  text, 
+  completed, 
+  onToggle, 
+  isEditing = false, 
+  onTextChange, 
+  onBlur 
+}: TodoProps) => {
   const themeColors = useThemeColors();
   const [isCompleted, setIsCompleted] = useState(completed);
+  const [editText, setEditText] = useState(text);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setIsCompleted(completed);
   }, [completed]);
 
+  useEffect(() => {
+    setEditText(text);
+  }, [text]);
+
+  useEffect(() => {
+    // Автоматический фокус на поле ввода при редактировании
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+
   const handleToggle = () => {
     setIsCompleted(!isCompleted);
     // Вызываем родительскую функцию для обработки состояния завершения
     onToggle(id);
+  };
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditText(e.target.value);
+    if (onTextChange) {
+      onTextChange(id, e.target.value);
+    }
+  };
+
+  const handleBlur = () => {
+    if (onBlur) {
+      onBlur(id);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (onBlur) {
+        onBlur(id);
+      }
+    }
   };
 
   // Стили в соответствии со скриншотами
@@ -68,6 +113,17 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
     transition: 'all 0.2s ease',
   };
 
+  const inputStyle = {
+    background: 'transparent',
+    border: 'none',
+    outline: 'none',
+    width: '100%',
+    fontSize: '15px',
+    fontFamily: "'SF Pro Display', sans-serif",
+    color: '#000000',
+    padding: '0',
+  };
+
   return (
     <Cell style={cellStyle}>
       <div style={{ 
@@ -82,6 +138,7 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
             checked={isCompleted}
             onChange={handleToggle}
             style={checkboxStyle}
+            disabled={isEditing}
           />
           {isCompleted && (
             <svg
@@ -104,9 +161,23 @@ export const Todo = ({ id, text, completed, onToggle }: TodoProps) => {
             </svg>
           )}
         </div>
-        <span style={textStyle}>
-          {text}
-        </span>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={editText}
+            onChange={handleTextChange}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            placeholder="Введите текст задачи"
+            style={inputStyle}
+            autoFocus
+          />
+        ) : (
+          <span style={textStyle}>
+            {text}
+          </span>
+        )}
       </div>
     </Cell>
   );
