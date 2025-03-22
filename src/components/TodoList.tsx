@@ -119,7 +119,7 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
     );
   };
   
-  const handleBlur = (id: string) => {
+  const handleBlur = (_id: string) => {
     // Сохраняем задачу при потере фокуса
     setEditingId(null);
     
