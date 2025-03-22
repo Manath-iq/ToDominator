@@ -1,13 +1,26 @@
 @import url('./font.css');
 
-body {
+html, body {
   background: var(--tg-theme-secondary-bg-color, white);
   padding: 0;
   margin: 0;
   font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
+  /* Отключаем масштабирование */
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 * {
   box-sizing: border-box;
   font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+input, textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}html { height: 100%; width: 100%; }

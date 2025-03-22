@@ -78,6 +78,25 @@ export function init(debug: boolean): void {
     })
     .then(() => {
       viewport.bindCssVars();
+      
+      // Отключаем масштабирование через javascript
+      document.addEventListener('touchmove', function(event) {
+        // Проверка на масштабирование (добавляем приведение типа)
+        if ((event as any).scale && (event as any).scale !== 1) { 
+          event.preventDefault(); 
+        }
+      }, { passive: false });
+      
+      // Запрещаем двойной тап для масштабирования
+      let lastTapTime = 0;
+      document.addEventListener('touchend', function(event) {
+        const currentTime = new Date().getTime();
+        const tapTimeDiff = currentTime - lastTapTime;
+        if (tapTimeDiff < 300 && tapTimeDiff > 0) {
+          event.preventDefault();
+        }
+        lastTapTime = currentTime;
+      }, { passive: false });
     });
 
   // Define components-related CSS variables.
