@@ -47,7 +47,7 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
   };
 
   // Функция для обновления счетчиков задач
-  const updateCounts = (todosList: TodoItem[], completedTask: boolean = false) => {
+  const updateCounts = (completedTask: boolean = false) => {
     // Получаем текущую статистику
     const stats = getStats();
     
@@ -110,7 +110,7 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
   const saveTodos = (updatedTodos: TodoItem[], completedTask: boolean = false) => {
     try {
       localStorage.setItem(storageKey, JSON.stringify(updatedTodos));
-      updateCounts(updatedTodos, completedTask);
+      updateCounts(completedTask);
     } catch (error) {
       console.error('Ошибка при сохранении задач:', error);
     }
