@@ -26,6 +26,7 @@ export function App() {
   // Получаем ID пользователя для хранения задач
   const userId = user?.id?.toString() || 'anonymous';
   const storageKey = `todos_${userId}`;
+  const statsKey = `todo_stats_${userId}`;
 
   useEffect(() => {
     document.body.style.backgroundColor = themeColors.secondaryBgColor;
@@ -33,11 +34,20 @@ export function App() {
     
     // Загружаем данные о задачах для отображения счетчиков
     try {
-      const savedTodos = localStorage.getItem(storageKey);
-      if (savedTodos) {
-        const parsedTodos = JSON.parse(savedTodos);
-        setTotalCount(parsedTodos.length);
-        setCompletedCount(parsedTodos.filter((todo: {completed: boolean}) => todo.completed).length);
+      // Загружаем статистику
+      const statsJson = localStorage.getItem(statsKey);
+      if (statsJson) {
+        const stats = JSON.parse(statsJson);
+        setCompletedCount(stats.completed);
+        setTotalCount(stats.total);
+      } else {
+        // Если статистики нет, проверяем задачи
+        const savedTodos = localStorage.getItem(storageKey);
+        if (savedTodos) {
+          const parsedTodos = JSON.parse(savedTodos);
+          setTotalCount(parsedTodos.length);
+          setCompletedCount(parsedTodos.filter((todo: {completed: boolean}) => todo.completed).length);
+        }
       }
     } catch (error) {
       console.error('Ошибка при загрузке задач:', error);
@@ -46,14 +56,23 @@ export function App() {
     // Слушатель для обновления счетчиков при изменении localStorage
     const handleStorageChange = () => {
       try {
-        const savedTodos = localStorage.getItem(storageKey);
-        if (savedTodos) {
-          const parsedTodos = JSON.parse(savedTodos);
-          setTotalCount(parsedTodos.length);
-          setCompletedCount(parsedTodos.filter((todo: {completed: boolean}) => todo.completed).length);
+        // Сначала проверяем статистику
+        const statsJson = localStorage.getItem(statsKey);
+        if (statsJson) {
+          const stats = JSON.parse(statsJson);
+          setCompletedCount(stats.completed);
+          setTotalCount(stats.total);
         } else {
-          setTotalCount(0);
-          setCompletedCount(0);
+          // Если статистики нет, используем данные задач
+          const savedTodos = localStorage.getItem(storageKey);
+          if (savedTodos) {
+            const parsedTodos = JSON.parse(savedTodos);
+            setTotalCount(parsedTodos.length);
+            setCompletedCount(parsedTodos.filter((todo: {completed: boolean}) => todo.completed).length);
+          } else {
+            setTotalCount(0);
+            setCompletedCount(0);
+          }
         }
       } catch (error) {
         console.error('Ошибка при обновлении счетчиков задач:', error);

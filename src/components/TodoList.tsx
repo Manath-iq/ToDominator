@@ -22,14 +22,53 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
   const user = initData.user();
   const userId = user?.id?.toString() || 'anonymous';
   const storageKey = `todos_${userId}`;
+  const statsKey = `todo_stats_${userId}`;
+  
+  // Функция для получения статистики из localStorage
+  const getStats = () => {
+    try {
+      const statsJson = localStorage.getItem(statsKey);
+      if (statsJson) {
+        return JSON.parse(statsJson);
+      }
+    } catch (error) {
+      console.error('Ошибка при загрузке статистики:', error);
+    }
+    return { completed: 0, total: 0 };
+  };
+  
+  // Функция для сохранения статистики в localStorage
+  const saveStats = (completed: number, total: number) => {
+    try {
+      localStorage.setItem(statsKey, JSON.stringify({ completed, total }));
+    } catch (error) {
+      console.error('Ошибка при сохранении статистики:', error);
+    }
+  };
 
   // Функция для обновления счетчиков задач
-  const updateCounts = (todosList: TodoItem[]) => {
-    const completed = todosList.filter(todo => todo.completed).length;
+  const updateCounts = (todosList: TodoItem[], completedTask: boolean = false) => {
+    const currentTodos = todosList.filter(todo => !todo.completed).length;
+    const currentCompleted = todosList.filter(todo => todo.completed).length;
     
-    // Вызываем колбэк из родительского компонента, если он существует
+    // Получаем текущую статистику
+    const stats = getStats();
+    
+    // Если задача была завершена, увеличиваем счетчик выполненных
+    if (completedTask) {
+      stats.completed += 1;
+    }
+    
+    // Вычисляем общие показатели
+    const totalCompleted = stats.completed;
+    const totalTasks = stats.total;
+    
+    // Сохраняем обновленную статистику
+    saveStats(totalCompleted, totalTasks);
+    
+    // Вызываем колбэк из родительского компонента
     if (onCountsChange) {
-      onCountsChange(completed, todosList.length);
+      onCountsChange(totalCompleted, totalTasks);
     }
     
     // Создаем собственное событие для информирования других компонентов
@@ -39,27 +78,42 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
   // Загрузка данных при монтировании
   useEffect(() => {
     try {
+      // Загружаем задачи
       const savedTodos = localStorage.getItem(storageKey);
+      let parsedTodos: TodoItem[] = [];
+      
       if (savedTodos) {
-        const parsedTodos = JSON.parse(savedTodos);
+        parsedTodos = JSON.parse(savedTodos);
         setTodos(parsedTodos);
-        updateCounts(parsedTodos);
       } else {
         // Для новых пользователей - пустой массив задач
         setTodos([]);
-        updateCounts([]);
         localStorage.setItem(storageKey, JSON.stringify([]));
       }
+      
+      // Загружаем статистику
+      const stats = getStats();
+      
+      // Инициализируем статистику, если нет сохраненной
+      if (!stats.total) {
+        saveStats(0, parsedTodos.length);
+      }
+      
+      // Обновляем счетчики
+      if (onCountsChange) {
+        onCountsChange(stats.completed, stats.total);
+      }
+      
     } catch (error) {
-      console.error('Ошибка при загрузке задач:', error);
+      console.error('Ошибка при загрузке данных:', error);
     }
   }, [storageKey, onCountsChange]);
 
   // Сохранение в localStorage
-  const saveTodos = (updatedTodos: TodoItem[]) => {
+  const saveTodos = (updatedTodos: TodoItem[], completedTask: boolean = false) => {
     try {
       localStorage.setItem(storageKey, JSON.stringify(updatedTodos));
-      updateCounts(updatedTodos);
+      updateCounts(updatedTodos, completedTask);
     } catch (error) {
       console.error('Ошибка при сохранении задач:', error);
     }
@@ -81,7 +135,7 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
           todo.id === id ? { ...todo, completed: true } : todo
         );
         setTodos(updatedTodos);
-        saveTodos(updatedTodos);
+        saveTodos(updatedTodos, true); // Отмечаем, что задача была выполнена
         
         // Удаляем задачу через 5 секунд после завершения
         setTimeout(() => {
@@ -130,6 +184,14 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
     
     // Удаляем пустые задачи
     const filteredTodos = updatedTodos.filter(todo => todo.text !== '');
+    
+    // Если пользователь добавил текст в задачу, увеличиваем счетчик всех задач
+    if (filteredTodos.length > 0 && filteredTodos.length === updatedTodos.filter(todo => todo.text.trim() !== '').length) {
+      // Получаем текущую статистику
+      const stats = getStats();
+      // Увеличиваем счетчик всех задач
+      saveStats(stats.completed, stats.total + 1);
+    }
     
     setTodos(filteredTodos);
     saveTodos(filteredTodos);
