@@ -151,8 +151,22 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
   }, [todos]);
   
   return (
-    <div style={{ padding: '0 4px' }}>
-      <List style={{ paddingBottom: '6px', width: '100%', maxWidth: '100%' }}>
+    <div style={{ 
+      width: '100%',
+      boxSizing: 'border-box' as const,
+      maxWidth: '100%',
+      paddingLeft: 0,
+      paddingRight: 0,
+      paddingBottom: '20px'
+    }}>
+      <List style={{ 
+        paddingBottom: '8px', 
+        width: '100%', 
+        maxWidth: '100%',
+        boxSizing: 'border-box' as const,
+        padding: 0,
+        margin: 0
+      }}>
         {todos.map(todo => (
           <Todo
             key={todo.id}

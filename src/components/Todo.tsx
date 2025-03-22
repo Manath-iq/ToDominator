@@ -73,13 +73,15 @@ export const Todo = ({
     backgroundColor: isCompleted 
       ? themeColors.buttonColor
       : '#ffffff',
-    marginBottom: 6,
-    borderRadius: 10,
-    boxShadow: '0 1px 1px rgba(0, 0, 0, 0.05)',
+    marginBottom: 8,
+    borderRadius: 12,
+    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.06)',
     transform: isCompleted ? 'scale(0.98)' : 'scale(1)',
     transition: 'all 0.2s ease',
-    width: '100%',
-    maxWidth: '100%',
+    width: 'calc(100% - 32px)',
+    boxSizing: 'border-box' as const,
+    maxWidth: 'calc(100% - 32px)',
+    margin: '0 16px 8px 16px',
   };
 
   const checkboxStyle = {
@@ -127,12 +129,15 @@ export const Todo = ({
   return (
     <Cell style={cellStyle}>
       <div style={{ 
-        padding: '6px 12px', 
+        padding: '12px 16px', 
         display: "flex", 
         alignItems: "center",
         fontFamily: "'SF Pro Display', sans-serif",
+        boxSizing: 'border-box' as const,
+        width: '100%',
+        overflow: 'hidden'
       }}>
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
           <input
             type="checkbox"
             checked={isCompleted}
@@ -170,11 +175,21 @@ export const Todo = ({
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             placeholder="Введите текст задачи"
-            style={inputStyle}
+            style={{
+              ...inputStyle,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
             autoFocus
           />
         ) : (
-          <span style={textStyle}>
+          <span style={{
+            ...textStyle,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}>
             {text}
           </span>
         )}
