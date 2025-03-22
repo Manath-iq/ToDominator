@@ -155,7 +155,8 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
       completed: false
     };
     
-    const updatedTodos = [...todos, newTodo];
+    // Добавляем новую задачу в начало массива, а не в конец
+    const updatedTodos = [newTodo, ...todos];
     setTodos(updatedTodos);
     // Не сохраняем в localStorage пока пользователь не введет текст
     setEditingId(newTodoId);
