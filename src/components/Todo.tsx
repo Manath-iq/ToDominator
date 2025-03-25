@@ -68,30 +68,24 @@ export const Todo = ({
     }
   };
 
-  // Стили в соответствии со скриншотами
+  // Новые стили в соответствии со вторым скриншотом
   const cellStyle = {
-    backgroundColor: isCompleted 
-      ? themeColors.buttonColor
-      : '#ffffff',
+    backgroundColor: '#ffffff',
     marginBottom: 8,
-    borderRadius: 12,
-    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.06)',
-    transform: isCompleted ? 'scale(0.98)' : 'scale(1)',
-    transition: 'all 0.2s ease',
-    width: 'calc(100% - 32px)',
+    borderRadius: 18,
+    border: 'none',
+    width: '100%',
     boxSizing: 'border-box' as const,
-    maxWidth: 'calc(100% - 32px)',
-    margin: '0 16px 8px 16px',
+    position: 'relative' as const,
+    overflow: 'hidden',
+    height: 'auto'
   };
 
   const checkboxStyle = {
-    width: 18,
-    height: 18,
-    marginRight: 10,
-    borderRadius: 4,
-    border: isCompleted 
-      ? 'none' 
-      : `1.5px solid ${themeColors.hintColor}`,
+    width: 22,
+    height: 22,
+    borderRadius: '4px',
+    border: isCompleted ? 'none' : '2px solid #d1d1d6',
     backgroundColor: isCompleted
       ? themeColors.buttonColor
       : 'transparent',
@@ -102,16 +96,16 @@ export const Todo = ({
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     transition: 'all 0.2s ease',
+    flexShrink: 0,
+    boxSizing: 'border-box' as const
   };
 
   const textStyle = {
-    color: isCompleted 
-      ? themeColors.buttonTextColor 
-      : '#000000',
+    color: '#000000',
     flexGrow: 1,
-    fontSize: '15px',
+    fontSize: '16px',
     fontFamily: "'SF Pro Display', sans-serif",
-    fontWeight: isCompleted ? 500 : 400,
+    fontWeight: 400,
     transition: 'all 0.2s ease',
   };
 
@@ -120,43 +114,63 @@ export const Todo = ({
     border: 'none',
     outline: 'none',
     width: '100%',
-    fontSize: '15px',
+    fontSize: '16px',
     fontFamily: "'SF Pro Display', sans-serif",
     color: '#000000',
     padding: '0',
   };
 
+  // Боковая полоска статуса задачи
+  const stripeStyle = {
+    position: 'absolute' as const,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: '5px',
+    backgroundColor: isCompleted ? themeColors.buttonColor : 'transparent',
+  };
+
   return (
-    <Cell style={cellStyle}>
+    <Cell style={cellStyle} className={`todo-cell ${isCompleted ? 'completed' : ''}`}>
       <div style={{ 
-        padding: '12px 16px', 
+        padding: '12px 12px', 
         display: "flex", 
         alignItems: "center",
         fontFamily: "'SF Pro Display', sans-serif",
         boxSizing: 'border-box' as const,
         width: '100%',
+        minHeight: '48px',
         overflow: 'hidden'
       }}>
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-          <input
-            type="checkbox"
-            checked={isCompleted}
-            onChange={handleToggle}
-            style={checkboxStyle}
-            disabled={isEditing}
+        <div style={{ 
+          position: 'relative', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          flexShrink: 0,
+          marginRight: '12px'
+        }}>
+          <div
+            onClick={handleToggle}
+            style={{
+              ...checkboxStyle,
+              width: '24px',
+              height: '24px'
+            }}
+            className="todo-checkbox"
           />
           {isCompleted && (
             <svg
-              width="12"
-              height="12"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               style={{
                 position: 'absolute',
-                left: '3px',
-                top: '3px',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                left: '4px',
+                top: '4px'
               }}
             >
               <path
@@ -188,11 +202,16 @@ export const Todo = ({
             ...textStyle,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            textDecoration: isCompleted ? 'line-through' : 'none',
+            opacity: isCompleted ? 0.7 : 1
           }}>
             {text}
           </span>
         )}
+        
+        {/* Боковая полоска статуса */}
+        <div style={stripeStyle}></div>
       </div>
     </Cell>
   );

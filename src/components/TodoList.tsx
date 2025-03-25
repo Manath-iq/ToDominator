@@ -218,7 +218,7 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
       paddingLeft: 0,
       paddingRight: 0,
       paddingBottom: '20px'
-    }}>
+    }} className="todo-list-container">
       <List style={{ 
         paddingBottom: '8px', 
         width: '100%', 

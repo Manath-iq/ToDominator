@@ -24,3 +24,51 @@ input, textarea {
   user-select: text;
   -webkit-user-select: text;
 }html { height: 100%; width: 100%; }
+
+/* Добавляем стили для компонентов задач */
+.tg-ui-cell {
+  margin-bottom: 8px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Стили для элементов списка задач */
+.todo-cell {
+  background: #fff;
+  border-radius: 12px !important;
+  margin-bottom: 4px !important;
+  overflow: hidden;
+  box-shadow: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Переопределяем стили для контейнера задач */
+.todo-list-container {
+  padding: 0 !important;
+}
+
+/* Переопределяем стили для чекбоксов */
+.todo-checkbox {
+  border-radius: 4px !important;
+  width: 24px !important;
+  height: 24px !important;
+  margin: 0 !important;
+}
+
+/* Стиль для синей полоски справа от выполненной задачи */
+.todo-cell {
+  position: relative;
+}
+
+.todo-cell.completed::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #007AFF;
+}

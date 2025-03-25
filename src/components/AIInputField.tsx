@@ -50,9 +50,10 @@ export const AIInputField = () => {
         display: 'flex', 
         alignItems: 'center',
         backgroundColor: themeColors.secondaryBgColor,
-        borderRadius: '18px',
+        borderRadius: '12px',
         padding: '10px 12px',
-        border: `1px solid ${themeColors.borderColor}`
+        border: `1px solid ${themeColors.borderColor}`,
+        width: '100%'
       }}>
         <div style={{ 
           display: 'flex',
