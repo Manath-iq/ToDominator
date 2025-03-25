@@ -240,16 +240,6 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
           />
         ))}
       </List>
-      
-      {/* Скрытая кнопка-триггер для добавления задачи */}
-      <div style={{ display: 'none' }}>
-        <button 
-          onClick={handleAddTask}
-          data-add-task="true"
-        >
-          New Task
-        </button>
-      </div>
     </div>
   );
 }; 
