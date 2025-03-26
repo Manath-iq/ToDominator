@@ -140,7 +140,7 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
             saveTodos(filteredTodos);
             return filteredTodos;
           });
-        }, 5000);
+        }, 500);
       }
     }
   };
@@ -214,10 +214,11 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      paddingBottom: '12px',
+      paddingBottom: '0',
       overflow: 'hidden',
       paddingLeft: '0',
-      paddingRight: '0'
+      paddingRight: '0',
+      marginTop: '0'
     }}>
       {todos.map(todo => (
         <Todo

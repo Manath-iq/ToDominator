@@ -37,7 +37,9 @@ export const TodoApp = () => {
         minHeight: '100vh',
         backgroundColor: themeColors.secondaryBgColor,
         color: themeColors.textColor,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       <header
@@ -45,8 +47,7 @@ export const TodoApp = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '12px 16px',
-          marginBottom: '0',
+          padding: '8px 16px 0 16px',
           position: 'relative'
         }}
       >
@@ -130,8 +131,14 @@ export const TodoApp = () => {
         </div>
       </header>
       
-      <main style={{ padding: '0 16px', marginTop: '0' }}>
-        <div style={{ padding: '0' }}>
+      <main style={{ 
+        padding: '0 16px', 
+        marginTop: '0',
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1
+      }}>
+        <div style={{ padding: '0', marginBottom: '4px' }}>
           <button
             style={{
               width: '100%',
@@ -139,7 +146,7 @@ export const TodoApp = () => {
               color: themeColors.buttonTextColor,
               border: 'none',
               borderRadius: '12px',
-              padding: '12px 16px',
+              padding: '10px 16px',
               fontSize: '18px',
               fontWeight: '500',
               fontFamily: "'SF Pro Display', sans-serif",
@@ -147,7 +154,7 @@ export const TodoApp = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '12px',
+              marginBottom: '4px',
               boxSizing: 'border-box',
               textAlign: 'center'
             }}

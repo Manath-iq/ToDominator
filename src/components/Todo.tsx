@@ -70,7 +70,7 @@ export const Todo = ({
   const textStyle = {
     color: '#000000',
     flexGrow: 1,
-    fontSize: '15px',
+    fontSize: '16px',
     fontFamily: "'SF Pro Display', sans-serif",
     fontWeight: 400,
     transition: 'all 0.2s ease',
@@ -81,10 +81,10 @@ export const Todo = ({
     border: 'none',
     outline: 'none',
     width: '100%',
-    fontSize: '15px',
+    fontSize: '16px',
     fontFamily: "'SF Pro Display', sans-serif",
     color: '#000000',
-    padding: '0',
+    padding: '0 0 0 0',
   };
 
   return (
@@ -92,7 +92,7 @@ export const Todo = ({
       className={`todo-item ${isCompleted ? 'completed' : ''}`}
       style={{
         backgroundColor: '#ffffff',
-        marginBottom: '8px',
+        marginBottom: '12px',
         borderRadius: '12px',
         width: 'calc(100% - 32px)',
         marginLeft: 'auto',
@@ -103,13 +103,13 @@ export const Todo = ({
       }}
     >
       <div style={{ 
-        padding: '12px 16px', 
+        padding: '16px 16px', 
         display: "flex", 
         alignItems: "center",
         fontFamily: "'SF Pro Display', sans-serif",
         boxSizing: 'border-box',
         width: '100%',
-        minHeight: '52px',
+        minHeight: '48px',
         overflow: 'hidden',
       }}>
         <div style={{ 
@@ -118,13 +118,13 @@ export const Todo = ({
           alignItems: 'center', 
           justifyContent: 'center',
           flexShrink: 0,
-          marginRight: '14px'
+          marginRight: '16px'
         }}>
           <div
             onClick={handleToggle}
             style={{
-              width: '22px',
-              height: '22px',
+              width: '20px',
+              height: '20px',
               borderRadius: '4px',
               border: isCompleted ? 'none' : '2px solid #d1d1d6',
               backgroundColor: isCompleted ? themeColors.buttonColor : 'transparent',
