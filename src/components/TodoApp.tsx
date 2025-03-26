@@ -33,10 +33,11 @@ export const TodoApp = () => {
       style={{
         maxWidth: '600px',
         margin: '0 auto',
-        padding: '0 0 20px',
+        padding: '0',
         minHeight: '100vh',
         backgroundColor: themeColors.secondaryBgColor,
         color: themeColors.textColor,
+        overflow: 'hidden'
       }}
     >
       <header
@@ -45,7 +46,7 @@ export const TodoApp = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '12px 16px',
-          marginBottom: '10px',
+          marginBottom: '0',
           position: 'relative'
         }}
       >
@@ -129,7 +130,7 @@ export const TodoApp = () => {
         </div>
       </header>
       
-      <main style={{ padding: '0', marginTop: '10px' }}>
+      <main style={{ padding: '0 16px', marginTop: '0' }}>
         <div style={{ padding: '0' }}>
           <button
             style={{
@@ -146,7 +147,7 @@ export const TodoApp = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '20px',
+              marginBottom: '12px',
               boxSizing: 'border-box',
               textAlign: 'center'
             }}
@@ -165,7 +166,7 @@ export const TodoApp = () => {
         }} />
       </main>
       
-      <footer style={{ padding: '0', marginTop: '20px' }}>
+      <footer style={{ padding: '0', marginTop: '10px' }}>
         <AIInputField />
       </footer>
     </div>

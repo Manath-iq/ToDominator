@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { Cell } from '@telegram-apps/telegram-ui';
 import { useThemeColors } from './theme';
 
 interface TodoProps {
@@ -68,42 +67,10 @@ export const Todo = ({
     }
   };
 
-  // Новые стили в соответствии со вторым скриншотом
-  const cellStyle = {
-    backgroundColor: '#ffffff',
-    marginBottom: 8,
-    borderRadius: 18,
-    border: 'none',
-    width: '100%',
-    boxSizing: 'border-box' as const,
-    position: 'relative' as const,
-    overflow: 'hidden',
-    height: 'auto'
-  };
-
-  const checkboxStyle = {
-    width: 22,
-    height: 22,
-    borderRadius: '4px',
-    border: isCompleted ? 'none' : '2px solid #d1d1d6',
-    backgroundColor: isCompleted
-      ? themeColors.buttonColor
-      : 'transparent',
-    position: 'relative' as const,
-    appearance: 'none' as const,
-    cursor: 'pointer' as const,
-    display: 'flex' as const,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    transition: 'all 0.2s ease',
-    flexShrink: 0,
-    boxSizing: 'border-box' as const
-  };
-
   const textStyle = {
     color: '#000000',
     flexGrow: 1,
-    fontSize: '16px',
+    fontSize: '15px',
     fontFamily: "'SF Pro Display', sans-serif",
     fontWeight: 400,
     transition: 'all 0.2s ease',
@@ -114,33 +81,36 @@ export const Todo = ({
     border: 'none',
     outline: 'none',
     width: '100%',
-    fontSize: '16px',
+    fontSize: '15px',
     fontFamily: "'SF Pro Display', sans-serif",
     color: '#000000',
     padding: '0',
   };
 
-  // Боковая полоска статуса задачи
-  const stripeStyle = {
-    position: 'absolute' as const,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    width: '5px',
-    backgroundColor: isCompleted ? themeColors.buttonColor : 'transparent',
-  };
-
   return (
-    <Cell style={cellStyle} className={`todo-cell ${isCompleted ? 'completed' : ''}`}>
+    <div 
+      className={`todo-item ${isCompleted ? 'completed' : ''}`}
+      style={{
+        backgroundColor: '#ffffff',
+        marginBottom: '8px',
+        borderRadius: '12px',
+        width: 'calc(100% - 32px)',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        position: 'relative',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }}
+    >
       <div style={{ 
-        padding: '12px 12px', 
+        padding: '12px 16px', 
         display: "flex", 
         alignItems: "center",
         fontFamily: "'SF Pro Display', sans-serif",
-        boxSizing: 'border-box' as const,
+        boxSizing: 'border-box',
         width: '100%',
-        minHeight: '48px',
-        overflow: 'hidden'
+        minHeight: '52px',
+        overflow: 'hidden',
       }}>
         <div style={{ 
           position: 'relative', 
@@ -148,21 +118,31 @@ export const Todo = ({
           alignItems: 'center', 
           justifyContent: 'center',
           flexShrink: 0,
-          marginRight: '12px'
+          marginRight: '14px'
         }}>
           <div
             onClick={handleToggle}
             style={{
-              ...checkboxStyle,
-              width: '24px',
-              height: '24px'
+              width: '22px',
+              height: '22px',
+              borderRadius: '4px',
+              border: isCompleted ? 'none' : '2px solid #d1d1d6',
+              backgroundColor: isCompleted ? themeColors.buttonColor : 'transparent',
+              position: 'relative',
+              appearance: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+              flexShrink: 0,
+              boxSizing: 'border-box'
             }}
-            className="todo-checkbox"
           />
           {isCompleted && (
             <svg
-              width="14"
-              height="14"
+              width="12"
+              height="12"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -211,8 +191,17 @@ export const Todo = ({
         )}
         
         {/* Боковая полоска статуса */}
-        <div style={stripeStyle}></div>
+        {isCompleted && (
+          <div style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            bottom: 0,
+            width: '3px',
+            backgroundColor: themeColors.buttonColor,
+          }}></div>
+        )}
       </div>
-    </Cell>
+    </div>
   );
 }; 

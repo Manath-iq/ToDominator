@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { List } from '@telegram-apps/telegram-ui';
 import { v4 as uuidv4 } from 'uuid';
 import { initData } from '@telegram-apps/sdk-react';
 import { Todo } from './Todo';
@@ -213,33 +212,25 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
   return (
     <div style={{ 
       width: '100%',
-      boxSizing: 'border-box' as const,
-      maxWidth: '100%',
-      paddingLeft: 0,
-      paddingRight: 0,
-      paddingBottom: '20px'
-    }} className="todo-list-container">
-      <List style={{ 
-        paddingBottom: '8px', 
-        width: '100%', 
-        maxWidth: '100%',
-        boxSizing: 'border-box' as const,
-        padding: 0,
-        margin: 0
-      }}>
-        {todos.map(todo => (
-          <Todo
-            key={todo.id}
-            id={todo.id}
-            text={todo.text}
-            completed={todo.completed}
-            onToggle={handleToggle}
-            isEditing={todo.id === editingId}
-            onTextChange={handleTextChange}
-            onBlur={handleBlur}
-          />
-        ))}
-      </List>
+      display: 'flex',
+      flexDirection: 'column',
+      paddingBottom: '12px',
+      overflow: 'hidden',
+      paddingLeft: '0',
+      paddingRight: '0'
+    }}>
+      {todos.map(todo => (
+        <Todo
+          key={todo.id}
+          id={todo.id}
+          text={todo.text}
+          completed={todo.completed}
+          onToggle={handleToggle}
+          isEditing={todo.id === editingId}
+          onTextChange={handleTextChange}
+          onBlur={handleBlur}
+        />
+      ))}
     </div>
   );
 }; 
