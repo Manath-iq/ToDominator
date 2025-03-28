@@ -92,7 +92,7 @@ export const Todo = ({
       className={`todo-item ${isCompleted ? 'completed' : ''}`}
       style={{
         backgroundColor: '#ffffff',
-        marginBottom: '12px',
+        marginBottom: '10px',
         borderRadius: '12px',
         width: 'calc(100% - 32px)',
         marginLeft: 'auto',

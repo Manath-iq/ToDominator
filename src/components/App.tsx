@@ -113,7 +113,7 @@ export function App() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '12px 16px',
+            padding: '12px 16px 10px',
             position: 'sticky',
             top: 0,
             zIndex: 10,
@@ -202,7 +202,7 @@ export function App() {
         </header>
         
         <div style={{
-          padding: '16px 16px 0',
+          padding: '10px 16px 0',
           position: 'sticky',
           top: '73px',
           zIndex: 10,
@@ -223,7 +223,7 @@ export function App() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '20px'
+              marginBottom: '10px'
             }}
             data-add-task="true"
           >
@@ -239,7 +239,7 @@ export function App() {
           overflowY: 'auto',
           overflowX: 'hidden',
           paddingBottom: '80px',
-          paddingTop: '10px'
+          paddingTop: '0px'
         }}>
           <TodoList onCountsChange={(completed, total) => {
             setCompletedCount(completed);
