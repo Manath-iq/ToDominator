@@ -190,17 +190,15 @@ export const Todo = ({
           </span>
         )}
         
-        {/* Боковая полоска статуса */}
-        {isCompleted && (
-          <div style={{
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: '3px',
-            backgroundColor: themeColors.buttonColor,
-          }}></div>
-        )}
+        {/* Боковая полоска статуса - синяя для выполненных, серая для невыполненных */}
+        <div style={{
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: '13px',
+          backgroundColor: isCompleted ? themeColors.buttonColor : '#d1d1d6',
+        }}></div>
       </div>
     </div>
   );
