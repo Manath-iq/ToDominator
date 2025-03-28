@@ -174,6 +174,9 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
     // Сохраняем задачу при потере фокуса
     setEditingId(null);
     
+    // Сохраняем исходное количество задач для сравнения
+    const originalTodoCount = todos.length;
+    
     const updatedTodos = todos.map(todo => ({
       ...todo,
       text: todo.text.trim()
@@ -182,12 +185,15 @@ export const TodoList = ({ onCountsChange }: TodoListProps) => {
     // Удаляем пустые задачи
     const filteredTodos = updatedTodos.filter(todo => todo.text !== '');
     
-    // Если пользователь добавил текст в задачу, увеличиваем счетчик всех задач
-    if (filteredTodos.length > 0 && filteredTodos.length === updatedTodos.filter(todo => todo.text.trim() !== '').length) {
-      // Получаем текущую статистику
-      const stats = getStats();
-      // Увеличиваем счетчик всех задач
-      saveStats(stats.completed, stats.total + 1);
+    // Получаем текущую статистику только один раз
+    const stats = getStats();
+    
+    // Увеличиваем счетчик только если число задач с текстом увеличилось
+    // Это происходит только когда была добавлена новая задача с текстом
+    if (filteredTodos.length > originalTodoCount - 1) {
+      // Добавлена как минимум одна новая задача с текстом
+      // Увеличиваем счетчик на разницу между новым количеством и предыдущим
+      saveStats(stats.completed, stats.total + (filteredTodos.length - (originalTodoCount - 1)));
     }
     
     setTodos(filteredTodos);
