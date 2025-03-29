@@ -187,7 +187,7 @@ export const AIInputField = () => {
   }, [inputValue]);
   
   // Функция для отправки запроса к AI через Cloudflare Worker
-  const sendRequestToAI = async (userInput: string, context: ContextTag[]) => {
+  const sendRequestToAI = async (userInput: string) => {
     setIsLoading(true);
     
     try {
@@ -245,7 +245,7 @@ export const AIInputField = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      sendRequestToAI(inputValue, contextTags);
+      sendRequestToAI(inputValue);
     }
   };
   
