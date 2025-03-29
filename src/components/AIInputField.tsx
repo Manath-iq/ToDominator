@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useThemeColors } from './theme';
 
 interface ContextTag {
@@ -146,50 +146,63 @@ export const AIInputField = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [aiResponse, setAiResponse] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
-  // Обработка ввода и извлечение тегов контекста
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Обработка ввода
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setInputValue(value);
     
-    // Извлекаем контекстные теги при вводе
-    const taskTagsRegex = /<task>(.*?)<\/task>/g;
-    const matches = [...value.matchAll(taskTagsRegex)];
+    // Убрана функциональность парсинга тегов задач
+    setContextTags([]);
     
-    const newTags: ContextTag[] = matches.map((match, index) => ({
-      id: `tag-${index}`,
-      type: 'task',
-      content: match[1]
-    }));
-    
-    setContextTags(newTags);
+    // Автоматическое регулирование высоты
+    adjustTextareaHeight();
   };
+  
+  // Регулирование высоты textarea
+  const adjustTextareaHeight = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    
+    // Сбрасываем высоту для корректного вычисления
+    textarea.style.height = 'auto';
+    
+    // Сравниваем высоту содержимого с базовой высотой одной строки
+    const baseHeight = 24; // Высота одной строки
+    const scrollHeight = textarea.scrollHeight;
+    
+    if (scrollHeight > baseHeight) {
+      // Только если контент не вмещается в одну строку, увеличиваем высоту
+      textarea.style.height = `${scrollHeight}px`;
+    } else {
+      // Иначе фиксируем высоту в одну строку
+      textarea.style.height = `${baseHeight}px`;
+    }
+  };
+  
+  // Вызываем регулировку высоты при изменении значения
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [inputValue]);
   
   // Функция для отправки запроса к AI через Cloudflare Worker
   const sendRequestToAI = async (userInput: string, context: ContextTag[]) => {
     setIsLoading(true);
     
     try {
-      // Формируем контекст из задач для AI
-      const taskContext = context
-        .filter(tag => tag.type === 'task')
-        .map(tag => tag.content)
-        .join(", ");
-      
-      // Очищаем входной текст от тегов
-      const cleanInput = userInput.replace(/<task>.*?<\/task>/g, '').trim();
+      // Очищаем входной текст (теги больше не используются)
+      const cleanInput = userInput.trim();
       
       // URL вашего Cloudflare Worker
-      // TODO: Замените на ваш реальный URL после деплоя Worker
       const workerUrl = 'https://todominator-ai-proxy.todominate-ai.workers.dev';
       
       console.log('Отправляем запрос к Worker:', {
         question: cleanInput,
-        context: taskContext
+        context: "" // Пустой контекст, т.к. функционал тегов задач отключен
       });
       
-      // Отправляем запрос к Worker вместо прямого обращения к API
+      // Отправляем запрос к Worker
       const response = await fetch(workerUrl, {
         method: 'POST',
         headers: {
@@ -197,7 +210,7 @@ export const AIInputField = () => {
         },
         body: JSON.stringify({
           question: cleanInput,
-          context: taskContext
+          context: "" // Пустой контекст, т.к. функционал тегов задач отключен
         })
       });
       
@@ -278,30 +291,6 @@ export const AIInputField = () => {
     );
   };
   
-  // Добавление тега задачи в поле ввода
-  const addTaskTag = () => {
-    // Получаем текущую позицию курсора
-    const cursorPosition = inputRef.current?.selectionStart || inputValue.length;
-    
-    // Вставляем тег задачи в позицию курсора
-    const newValue = 
-      inputValue.substring(0, cursorPosition) + 
-      '<task>Название задачи</task>' + 
-      inputValue.substring(cursorPosition);
-    
-    setInputValue(newValue);
-    
-    // Устанавливаем фокус на поле ввода после добавления тега
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-        // Устанавливаем курсор внутри тега после слова "Название"
-        const newPosition = cursorPosition + '<task>'.length;
-        inputRef.current.setSelectionRange(newPosition, newPosition + 14);
-      }
-    }, 0);
-  };
-  
   return (
     <>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
@@ -335,45 +324,19 @@ export const AIInputField = () => {
               }}>
                 to do
               </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}>
-                {/* Кнопка добавления тега задачи */}
-                <div 
-                  onClick={addTaskTag}
-                  style={{
-                    fontSize: '12px',
-                    color: themeColors.buttonColor,
-                    cursor: 'pointer',
-                    padding: '3px 6px',
-                    borderRadius: '4px',
-                    backgroundColor: themeColors.secondaryBgColor,
-                    border: `1px solid ${themeColors.buttonColor}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '3px'
-                  }}
-                >
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 5V19M5 12H19" stroke={themeColors.buttonColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span>Добавить задачу</span>
-                </div>
-              </div>
             </div>
             
             {/* Отображение контекстных тегов */}
             {renderContextTags()}
             
             <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-              <input
-                ref={inputRef}
+              <textarea
+                ref={textareaRef}
                 value={inputValue}
                 onChange={handleInputChange}
                 placeholder="Ask me about anything"
                 disabled={isLoading}
+                rows={1}
                 style={{ 
                   flex: 1,
                   background: 'transparent',
@@ -383,6 +346,11 @@ export const AIInputField = () => {
                   fontFamily: "'SF Pro Display', sans-serif",
                   fontSize: '16px',
                   padding: '0',
+                  resize: 'none', // Отключаем изменение размера пользователем
+                  height: '24px', // Начальная высота в одну строку
+                  minHeight: '24px',
+                  lineHeight: '24px',
+                  overflow: 'hidden', // Скрываем полосы прокрутки
                 }}
               />
               
