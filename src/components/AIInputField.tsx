@@ -166,7 +166,7 @@ export const AIInputField = () => {
     setContextTags(newTags);
   };
   
-  // Функция для отправки запроса к IO Intelligence API
+  // Функция для отправки запроса к AI через Cloudflare Worker
   const sendRequestToAI = async (userInput: string, context: ContextTag[]) => {
     setIsLoading(true);
     
@@ -180,69 +180,48 @@ export const AIInputField = () => {
       // Очищаем входной текст от тегов
       const cleanInput = userInput.replace(/<task>.*?<\/task>/g, '').trim();
       
-      // Формируем системное сообщение
-      const systemMessage = "Ты помощник по задачам, который дает краткие и полезные ответы на русском языке.";
+      // URL вашего Cloudflare Worker
+      // TODO: Замените на ваш реальный URL после деплоя Worker
+      const workerUrl = 'https://todominator-ai-proxy.todominate-ai.workers.dev';
       
-      // Составляем сообщение с контекстом задач, если они есть
-      const userMessage = taskContext 
-        ? `Контекст моих задач: ${taskContext}. Мой вопрос: ${cleanInput}` 
-        : cleanInput;
-      
-      // API ключ
-      const API_TOKEN = 'io-v2-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lciI6ImY1YjNkZGIzLWJiNjctNGEzOC04ZjAwLWY0ZTU1OWZiMGVjOCIsImV4cCI6NDg5NjgwNjUxM30.oAgtqeYt0HsyiquwNjyZFaTDiQz0DiLeoKwDRChw4Xtve5-83cwhYBkHtWQ9R3D8wLIppq5halL9Uz0ARe-TEw';
-      
-      console.log('Отправляем запрос к API...');
-      
-      const requestBody = {
-        model: 'meta-llama/Llama-3.3-70B-Instruct',
-        messages: [
-          {
-            role: 'system',
-            content: systemMessage
-          },
-          {
-            role: 'user',
-            content: userMessage
-          }
-        ],
-        temperature: 0.7,
-        reasoning_content: true,
-        max_completion_tokens: 250
-      };
-      
-      console.log('Запрос:', JSON.stringify(requestBody, null, 2));
-      
-      const response = await fetch('https://api.intelligence.io.solutions/api/v1/chat/completions', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_TOKEN}`
-        },
-        body: JSON.stringify(requestBody)
+      console.log('Отправляем запрос к Worker:', {
+        question: cleanInput,
+        context: taskContext
       });
       
-      console.log('Статус ответа:', response.status);
+      // Отправляем запрос к Worker вместо прямого обращения к API
+      const response = await fetch(workerUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          question: cleanInput,
+          context: taskContext
+        })
+      });
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Ошибка API:', errorText);
-        throw new Error(`API вернул ошибку: ${response.status}. ${errorText}`);
+        console.error('Ошибка Worker:', errorText);
+        throw new Error(`Ошибка сервера: ${response.status}`);
       }
       
       const data = await response.json();
-      console.log('Ответ API:', data);
       
-      // Проверяем структуру ответа согласно документации
-      if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-        setAiResponse(data.choices[0].message.content);
-        setModalVisible(true);
-      } else {
-        throw new Error('Неожиданная структура ответа API');
+      if (data.error) {
+        throw new Error(data.error);
       }
+      
+      if (!data.answer) {
+        throw new Error('Получен некорректный ответ от сервера');
+      }
+      
+      setAiResponse(data.answer);
+      setModalVisible(true);
     } catch (error) {
       console.error('Ошибка при запросе к AI:', error);
-      setAiResponse('Произошла ошибка при обработке запроса: ' + (error instanceof Error ? error.message : 'Неизвестная ошибка') + '\n\nПожалуйста, попробуйте снова позже.');
+      setAiResponse('Произошла ошибка при обработке запроса. Пожалуйста, попробуйте снова позже.');
       setModalVisible(true);
     } finally {
       setIsLoading(false);
